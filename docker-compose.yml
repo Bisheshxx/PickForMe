@@ -1,0 +1,15 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app # mount code
+      - /app/node_modules # container-only node_modules
+    working_dir: /app
+    environment:
+      CI: "true"
+    command: sh -c "corepack enable pnpm && pnpm install && pnpm dev"
+    user: root
