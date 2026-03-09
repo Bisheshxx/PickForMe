@@ -9,6 +9,7 @@ services:
       - .:/app # mount code
       - /app/node_modules # container-only node_modules
     working_dir: /app
+    env_file: dev.env
     environment:
       CI: "true"
     command: sh -c "corepack enable pnpm && pnpm install && pnpm dev"
