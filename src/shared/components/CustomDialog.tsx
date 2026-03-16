@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DialogEnum } from "@/store/types/DialogEnum";
+import useUiState from "@/store/ui.store";
 
 interface IProps {
   button: React.ReactNode;
@@ -16,7 +16,7 @@ interface IProps {
   title: string;
   description: string;
   children: React.ReactNode;
-  // footer: React.ReactNode;
+  dialogName: DialogEnum; //add dialog name in the enum as you create
 }
 
 export default function CustomDialog({
@@ -25,10 +25,14 @@ export default function CustomDialog({
   title,
   description,
   children,
-  // footer,
+  dialogName,
 }: IProps) {
+  const { openDialogName, setOpenDialogName } = useUiState();
   return (
-    <Dialog>
+    <Dialog
+      open={dialogName === openDialogName}
+      onOpenChange={(open) => setOpenDialogName(open ? dialogName : null)}
+    >
       <DialogTrigger asChild>{button}</DialogTrigger>
       <DialogContent className={width}>
         <DialogHeader>

@@ -12,6 +12,7 @@ import { Decision } from "@/features/decision/types/decision.types";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { formatRelativeOrNZDate } from "../lib/date-utils/date.util";
 
 interface IProps {
   data: Decision;
@@ -33,7 +34,7 @@ export default function CardComponent({ data }: IProps) {
           {data?.description}
         </CardDescription>
         <CardFooter className="px-0 text-[10px] text-gray-500">
-          {data?.createdAt}
+          {formatRelativeOrNZDate(data?.createdAt)}
         </CardFooter>
         <CardAction className="h-full">
           <ChevronRight className="stroke-gray-500 group-hover:stroke-white transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" />

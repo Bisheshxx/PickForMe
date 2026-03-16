@@ -9,9 +9,11 @@ import { useCallback } from "react";
 import CreateDecisionForm from "../Forms/create-decision";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { DecisionService } from "../services/decision-services";
+import useUiState from "@/store/ui.store";
 
 export function CreateDecisionDialog() {
   // const handleCreate = async (data: z.infer<typeof SchemaCreateDecision>) => {};
+  const { setOpenDialogName } = useUiState();
   const form = useForm<z.infer<typeof SchemaCreateDecision>>({
     resolver: zodResolver(SchemaCreateDecision),
     defaultValues: {
@@ -21,7 +23,7 @@ export function CreateDecisionDialog() {
   });
 
   const CreateDecision = useApiMutation(DecisionService.createDecision, {
-    onSuccess: (data) => console.log(data.data, "success"),
+    onSuccess: () => setOpenDialogName(null),
     onError: (error) => console.log(error.toString()),
     invalidateQueries: ["decisions"],
   });
@@ -43,6 +45,7 @@ export function CreateDecisionDialog() {
       title="Create a New Decision"
       description="Create a decision to help you choose between multiple options.Give it a clear title and description."
       width="max-w-sm sm:max-w-sm"
+      dialogName="create-decision"
     >
       <CreateDecisionForm form={form} handleCreate={handleCreate} />
     </CustomDialog>
