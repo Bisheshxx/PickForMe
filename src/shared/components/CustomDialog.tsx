@@ -9,42 +9,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
 
 interface IProps {
   button: React.ReactNode;
-  width?: number;
+  width?: string;
   title: string;
   description: string;
   children: React.ReactNode;
-  footer: React.ReactNode;
+  // footer: React.ReactNode;
 }
 
 export default function CustomDialog({
   button,
-  width = 425,
+  width = "max-w-md",
   title,
   description,
   children,
-  footer,
+  // footer,
 }: IProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{button}</DialogTrigger>
-      <DialogContent className={`sm:max-w-[${width}px]`}>
+      <DialogContent className={width}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         {children}
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          {footer}
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -4,10 +4,17 @@ export interface ApiResponse<T> {
   message: string;
   errors: string | string[];
   errorType?: string;
-  meta?: {
-    page: number;
-    pageSize: number;
-    totalCount: number;
-    totalPages: number;
-  };
+  meta?: Meta;
+}
+
+export interface Meta {
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PaginationQuery {
+  page: number;
+  pageSize: number;
 }

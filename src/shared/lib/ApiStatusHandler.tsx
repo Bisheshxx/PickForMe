@@ -1,4 +1,6 @@
-import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Loader2, TriangleAlert } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface IProps {
@@ -7,7 +9,6 @@ interface IProps {
   isSuccess: boolean;
   error: string;
   children: React.ReactElement | string;
-  renderCondition?: boolean;
 }
 export function ApiStatusHandler({
   isLoading,
@@ -15,10 +16,9 @@ export function ApiStatusHandler({
   isSuccess,
   error,
   children,
-  renderCondition,
   ...props
 }: IProps & React.ComponentProps<"div">) {
-  if (renderCondition) return null;
+  const router = useRouter();
   if (isLoading)
     return (
       <div {...props}>
@@ -31,7 +31,15 @@ export function ApiStatusHandler({
   if (isError)
     return (
       <div {...props} role="alert">
-        {error}
+        <div className="flex flex-col items-center justify-center gap-5">
+          <TriangleAlert size={100} color="red" />
+          <p className="text-xl font-extralight">
+            {error || "An unexpected Error Occurred"}
+          </p>
+          <Button variant={"destructive"} onClick={() => router.push("/login")}>
+            Back to Login
+          </Button>
+        </div>
       </div>
     );
   if (isSuccess) return <div {...props}>{children}</div>;

@@ -15,6 +15,7 @@ import { SchemaLogin } from "@/features/auth/schema/login.schema";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import LoadingButtonComponent from "@/shared/components/LoadingButtonComponent";
+import { googleLogin } from "@/shared/lib/auth/google-login";
 
 interface IProps {
   handleLogin: (data: { email: string; password: string }) => Promise<void>;
@@ -91,6 +92,7 @@ export function LoginForm({ form, handleLogin }: IProps) {
             variant="outline"
             type="button"
             disabled={form.formState.isSubmitting}
+            onClick={() => googleLogin()}
           >
             Login with Google
           </Button>

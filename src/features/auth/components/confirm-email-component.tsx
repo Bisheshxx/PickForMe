@@ -1,14 +1,17 @@
 "use client";
 import React, { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { AuthenticationService } from "../services/authentication-service";
 import { ApiStatusHandler } from "@/shared/lib/ApiStatusHandler";
+import { CircleCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ConfirmEmailPage() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   const token = searchParams.get("token");
+  const router = useRouter();
 
   const { mutateAsync, isPending, isSuccess, isError, error } = useApiMutation(
     AuthenticationService.confirmEmail,
@@ -36,7 +39,15 @@ export default function ConfirmEmailPage() {
         isSuccess={isSuccess}
         error={error?.response?.message || "An error occurred."}
       >
-        Email confirmed successfully!
+        <div className="flex flex-col items-center justify-center gap-5">
+          <CircleCheck size={100} color="green" />
+          <p className="text-xl font-extralight">
+            Email has been successfully Confirmed
+          </p>
+          <Button variant={"destructive"} onClick={() => router.push("/login")}>
+            Login
+          </Button>
+        </div>
       </ApiStatusHandler>
     </div>
   );

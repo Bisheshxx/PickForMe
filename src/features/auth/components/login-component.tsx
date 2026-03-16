@@ -2,7 +2,7 @@
 
 import { SchemaLogin } from "@/features/auth/schema/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useCallback } from "react";
 import z from "zod";
 import {
   Card,
@@ -35,10 +35,13 @@ export default function LoginComponent() {
       password: "",
     },
   });
+  const handleLogin = useCallback(
+    async (data: z.infer<typeof SchemaLogin>) => {
+      await Login.mutateAsync(data);
+    },
+    [Login],
+  );
 
-  const handleLogin = async (data: z.infer<typeof SchemaLogin>) => {
-    await Login.mutateAsync(data);
-  };
   return (
     <div className={cn("flex flex-col gap-6")}>
       <Card>

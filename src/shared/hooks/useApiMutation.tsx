@@ -30,8 +30,10 @@ export const useApiMutation = <TData, TVariables>(
   return useMutation<ApiResponse<TData>, ApiErrorHandler, TVariables>({
     mutationFn,
     onError: (error, variables, onMutateResult, context) => {
-      toast.error(error?.response?.errorType, {
-        description: error?.response?.message,
+      toast.error(error?.response?.errorType || "Something went wrong", {
+        description:
+          error?.response?.message ||
+          "Please try again or try refreshing the page",
       });
       if (typeof userOnError === "function") {
         userOnError(error, variables, onMutateResult, context);

@@ -34,4 +34,19 @@ export const AuthenticationService = {
       url: "accounts/confirm-email",
       params,
     }),
+  logout: async (): Promise<ApiResponse<null>> =>
+    request<null>({
+      method: "POST",
+      url: "accounts/logout",
+    }),
+  getProfile: async (): Promise<ApiResponse<null>> =>
+    request<null>({
+      method: "GET",
+      url: "accounts/profile",
+    }),
+  updateProfile: async (): Promise<ApiResponse<null>> =>
+    request<null>({
+      method: "PUT",
+      url: "api/accounts",
+    }),
 };

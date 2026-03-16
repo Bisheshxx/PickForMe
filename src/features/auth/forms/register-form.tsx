@@ -11,9 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import LoadingButtonComponent from "@/shared/components/LoadingButtonComponent";
 import Link from "next/link";
+import { googleLogin } from "@/shared/lib/auth/google-login";
 
 interface IProps {
   handleRegister: (data: z.infer<typeof SchemaRegister>) => Promise<void>;
@@ -29,6 +29,7 @@ export default function RegisterForm({ handleRegister, form }: IProps) {
             variant="outline"
             type="button"
             disabled={form.formState.isSubmitting}
+            onClick={() => googleLogin()}
           >
             Sign up with Google
           </Button>
@@ -136,7 +137,7 @@ export default function RegisterForm({ handleRegister, form }: IProps) {
         <Field>
           <LoadingButtonComponent form={form} text="Register" />
           <FieldDescription className="text-center">
-            Already have an account?<Link href="/register">Sign in</Link>
+            Already have an account? <Link href="/login">Sign in</Link>
           </FieldDescription>
           <FieldDescription className="text-center text-xs ">
             By continuing, you agree to Decision Maker&apos;s Terms of Service
