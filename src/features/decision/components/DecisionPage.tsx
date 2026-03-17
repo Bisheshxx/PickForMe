@@ -5,6 +5,7 @@ import SearchInput from "@/shared/components/Search/SearchInput";
 import { useQuery } from "@tanstack/react-query";
 import { DecisionService } from "../services/decision-services";
 import { Decision } from "../types/decision.types";
+import { useApiQuery } from "@/shared/hooks/useApiQuery";
 
 export default function DecisionPage() {
   const { data: response } = useQuery({
