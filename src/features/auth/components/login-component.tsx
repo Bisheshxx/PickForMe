@@ -2,7 +2,7 @@
 
 import { SchemaLogin } from "@/features/auth/schema/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import z from "zod";
 import {
   Card,
@@ -16,10 +16,24 @@ import { LoginForm } from "../forms/login-form";
 import { useForm } from "react-hook-form";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { AuthenticationService } from "../services/authentication-service";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function LoginComponent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("code") === "401") {
+      const timer = window.setTimeout(() => {
+        toast.error("Please login to continue");
+        window.history.replaceState({}, "", "/login");
+      }, 50);
+
+      return () => window.clearTimeout(timer);
+    }
+  }, [router, searchParams]);
+
   const Login = useApiMutation(AuthenticationService.login, {
     onSuccess: () => router.push("/"),
     onError: (error) =>

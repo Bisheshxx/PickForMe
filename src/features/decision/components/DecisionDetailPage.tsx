@@ -1,11 +1,9 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { DecisionService } from "../services/decision-services";
-import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
-import { Button } from "@/components/ui/button";
 import BorderLessInput from "@/shared/components/BorderLessInput";
+import { useApiQuery } from "@/shared/hooks/useApiQuery";
 
 interface IProps {
   id: string;
@@ -13,24 +11,26 @@ interface IProps {
 
 export default function DecisionDetailPage({ id }: IProps) {
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
-  const { data: response } = useQuery({
+  const { data, meta } = useApiQuery({
     queryFn: () => DecisionService.getDecisionDetails(id),
     queryKey: ["decision-detail", id],
   });
 
-  const originalTitle = response?.data?.title ?? "";
+  const originalTitle = data?.title ?? "";
   const title = draftTitle ?? originalTitle;
-  const isTitleDirty = draftTitle !== null && draftTitle !== originalTitle;
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setDraftTitle(e.target.value);
   };
 
+  console.log(meta);
+
   return (
     <div className="container mx-auto pt-2">
-      <div className="flex gap-1 items-end">
+      <div className="flex gap-3 flex-col">
         <BorderLessInput value={title} onChangeHandler={onChangeHandler} />
+        <p>{data?.description}</p>
         {/* {isTitleDirty && <Button variant={"ghost"}>Update</Button>} */}
       </div>
     </div>

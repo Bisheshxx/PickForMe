@@ -2,7 +2,6 @@
 import CardComponent from "@/shared/components/CardComponent";
 import { CreateDecisionDialog } from "./CreateDecisionDialog";
 import SearchInput from "@/shared/components/Search/SearchInput";
-import { useQuery } from "@tanstack/react-query";
 import { DecisionService } from "../services/decision-services";
 import { Decision } from "../types/decision.types";
 import { useCallback, useEffect, useState } from "react";
@@ -12,10 +11,9 @@ import useUiState from "@/store/ui.store";
 import PaginationComponent from "@/shared/components/PaginationComponent";
 import { ApiStatusHandler } from "@/shared/lib/ApiStatusHandler";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useApiQuery } from "@/shared/hooks/useApiQuery";
 
 export default function DecisionPage() {
-  const router = useRouter();
   const { urlState, setUrlState, resetUrlState } = useDecisionUrlState();
   const { page, pageSize, searchTerm } = urlState;
   const [search, setSearch] = useState(searchTerm || "");
@@ -42,11 +40,14 @@ export default function DecisionPage() {
     isSuccess,
     isError,
     error,
-  } = useQuery({
+    refetch,
+    meta,
+  } = useApiQuery({
     queryFn: () => DecisionService.getDecisions(urlState),
     queryKey: ["decisions", page, pageSize, searchTerm],
     retry: false,
   });
+  console.log(response, error);
 
   useEffect(() => {
     if (searchTerm !== debouncedSearch) {
@@ -56,8 +57,6 @@ export default function DecisionPage() {
       });
     }
   }, [debouncedSearch, setUrlState, searchTerm]);
-
-  console.log(error?.response);
 
   return (
     <div className="container mx-auto">
@@ -77,17 +76,17 @@ export default function DecisionPage() {
           isSuccess={isSuccess}
           error={error?.response?.message || error?.message}
           button={
-            <Button variant={"destructive"} onClick={() => router.push("/")}>
-              Back to Decision
+            <Button variant={"destructive"} onClick={() => refetch()}>
+              Refresh
             </Button>
           }
         >
-          <CardComponentGrid decision={response?.data || []} />
+          <CardComponentGrid decision={response || []} />
         </ApiStatusHandler>
-        {response?.meta && (
+        {meta && (
           <div className="w-full flex ">
             <PaginationComponent
-              meta={response?.meta}
+              meta={meta}
               handlePageChange={handlePageChange}
             />
           </div>
