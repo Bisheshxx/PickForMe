@@ -47,7 +47,6 @@ export default function DecisionPage() {
     queryKey: ["decisions", page, pageSize, searchTerm],
     retry: false,
   });
-  console.log(response, error);
 
   useEffect(() => {
     if (searchTerm !== debouncedSearch) {

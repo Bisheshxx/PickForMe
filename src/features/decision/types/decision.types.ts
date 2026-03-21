@@ -12,3 +12,13 @@ export type DecisionUrlDefaults = {
   pageSize: number;
   searchTerm: string;
 };
+
+export interface DecisionItem {
+  id: string | number;
+  title: string;
+  DecisionId: string;
+}
+
+export interface DecisionDetail extends Decision {
+  decisionItems: DecisionItem[];
+}

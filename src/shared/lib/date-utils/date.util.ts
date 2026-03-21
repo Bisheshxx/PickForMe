@@ -1,5 +1,18 @@
+const nzDateFormatter = new Intl.DateTimeFormat("en-NZ", {
+  timeZone: "Pacific/Auckland",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
+
+function isInvalidDate(date: Date) {
+  return Number.isNaN(date.getTime());
+}
+
 export function formatRelativeOrNZDate(dateString: string): string {
   const date = new Date(dateString);
+  if (!dateString || isInvalidDate(date)) return "-";
+
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffSec = Math.floor(diffMs / 1000);
@@ -13,12 +26,12 @@ export function formatRelativeOrNZDate(dateString: string): string {
   if (diffHour < 24) return `${diffHour} hours ago`;
   if (diffDay < 7) return `${diffDay} days ago`;
 
-  // NZ format: DD/MM/YYYY
-  const nzDate = new Date(
-    date.toLocaleString("en-NZ", { timeZone: "Pacific/Auckland" }),
-  );
-  const day = nzDate.getDate().toString().padStart(2, "0");
-  const month = (nzDate.getMonth() + 1).toString().padStart(2, "0");
-  const year = nzDate.getFullYear();
-  return `${day}/${month}/${year}`;
+  return nzDateFormatter.format(date);
+}
+
+export function getDateRelativeNZ(dateString: string): string {
+  const date = new Date(dateString);
+  if (!dateString || isInvalidDate(date)) return "n/a";
+
+  return nzDateFormatter.format(date);
 }

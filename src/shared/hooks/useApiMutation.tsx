@@ -14,7 +14,10 @@ type MutationOptions<TData, TVariables> = Omit<
   "mutationFn"
 >;
 
-type IOptions<T, F> = { invalidateQueries?: string[] } & MutationOptions<T, F>;
+type IOptions<T, F> = {
+  invalidateQueries?: string[];
+  showToast?: boolean;
+} & MutationOptions<T, F>;
 
 export const useApiMutation = <TData, TVariables>(
   mutationFn: (variables: TVariables) => Promise<ApiResponse<TData>>,
@@ -26,15 +29,19 @@ export const useApiMutation = <TData, TVariables>(
     onSuccess: userOnSuccess,
     ...restOptions
   } = options || {};
+  const showToast = options?.showToast ?? true;
 
   return useMutation<ApiResponse<TData>, ApiErrorHandler, TVariables>({
     mutationFn,
     onError: (error, variables, onMutateResult, context) => {
-      toast.error(error?.response?.errorType || "Something went wrong", {
-        description:
-          error?.response?.message ||
-          "Please try again or try refreshing the page",
-      });
+      if (showToast) {
+        toast.error(error?.response?.errorType || "Something went wrong", {
+          description:
+            error?.response?.message ||
+            "Please try again or try refreshing the page",
+        });
+      }
+
       if (typeof userOnError === "function") {
         userOnError(error, variables, onMutateResult, context);
       }
